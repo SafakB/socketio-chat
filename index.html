@@ -1,0 +1,148 @@
+<html>
+
+<head>
+    <title>Login With JS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <script>
+    </script>
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-6">
+                    <h2>Login</h2>
+                    <form action="">
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" class="form-control" id="username" placeholder="Enter username"
+                                name="username">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" class="form-control" id="password" placeholder="Enter password"
+                                name="password">
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="login()">Login</button>
+
+                    </form>
+                </div>
+                <div class="col-6">
+                    <h2>Register</h2>
+                    <form action="">
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" class="form-control" id="username1" placeholder="Enter username"
+                                name="username1">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" class="form-control" id="nickname1" placeholder="Enter nickname"
+                                name="nickname1">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" class="form-control" id="password1" placeholder="Enter password"
+                                name="password">
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="register()">Register</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+
+
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const endpoint = 'http://localhost:3001/login';
+
+            fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username,
+                    password
+                })
+            }).then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        localStorage.setItem("user", JSON.stringify(data.user));
+                        localStorage.setItem("token", data.user.token);
+                        setTimeout(() => {
+                            window.location.href = 'chat.html';
+                        }, 300);
+                    } else {
+                        alert('Login failed');
+                    }
+                });
+
+        }
+
+        function register() {
+            const username = document.getElementById('username1').value;
+            const nickname = document.getElementById('nickname1').value;
+            const password = document.getElementById('password1').value;
+
+            const endpoint = 'http://localhost:3001/register';
+
+            fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username,
+                    nickname,
+                    password
+                })
+            }).then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('User registered successfully');
+                    } else {
+                        alert(data.error);
+                    }
+                });
+
+        }
+
+        const storedUser = JSON.parse(localStorage.getItem("user"));
+        const token = localStorage.getItem("token");
+
+        console.log(storedUser);
+        console.log(token);
+
+        function logout() {
+            localStorage.removeItem("user");
+            localStorage.removeItem("token");
+        }
+
+        function checkLogin() {
+            if (storedUser && token) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        if (checkLogin()) {
+            window.location.href = 'chat.html';
+        } else {
+            console.log('User is not logged in');
+        }
+    </script>
+</body>
+
+</html>
