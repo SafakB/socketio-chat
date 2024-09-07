@@ -67,7 +67,7 @@ module.exports = ({ io, users, onlineCount }) => {
 
         connection.query('INSERT INTO `room-messages` (room_id, message, user_id) VALUES (?, ?, ?)', [req.params.id, message, userId], function (err, result) {
             if (err) throw err;
-            n
+
             connection.query('SELECT `room-messages`.*, users.username FROM `room-messages` INNER JOIN users ON `room-messages`.user_id = users.id WHERE `room-messages`.id = ?', [result.insertId], function (err, rows) {
                 if (err) throw err;
 
