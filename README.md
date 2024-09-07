@@ -16,9 +16,16 @@ Mysql Supported
 - Connect / Disconnect
 - Send Message
 
+
+#### Before
+- Create database
+- Import database
+- Set `.env.example` and rename `.env`
+
 #### Start NodeJS Server
 
 ```bash
+npm install
 node app.js
 ```
 
