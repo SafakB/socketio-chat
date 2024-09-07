@@ -19,7 +19,7 @@ Mysql Supported
 
 #### Before
 - Create database
-- Import database
+- Import database `exampledb.sql`
 - Set `.env.example` and rename `.env`
 
 #### Start NodeJS Server
