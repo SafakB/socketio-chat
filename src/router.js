@@ -3,16 +3,12 @@ require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const mysql = require('mysql');
+const createConnection = require('./db'); // db.js dosyasını içe aktardık
 
 
 module.exports = ({ io, users, onlineCount }) => {
     router.get('/rooms', (req, res) => {
-        let connection = mysql.createConnection({
-            host: process.env.DB_HOST,
-            user: process.env.DB_USER,
-            password: process.env.DB_PASSWORD,
-            database: process.env.DB_NAME,
-        });
+        let connection = createConnection();
 
         connection.connect(function (err) {
             if (err) throw err;
@@ -27,12 +23,7 @@ module.exports = ({ io, users, onlineCount }) => {
 
     // get room messages localhost:3001/room-messages/1
     router.get('/room-messages/:id', (req, res) => {
-        let connection = mysql.createConnection({
-            host: process.env.DB_HOST,
-            user: process.env.DB_USER,
-            password: process.env.DB_PASSWORD,
-            database: process.env.DB_NAME,
-        });
+        let connection = createConnection();
 
         connection.connect(function (err) {
             if (err) throw err;
@@ -64,12 +55,7 @@ module.exports = ({ io, users, onlineCount }) => {
 
     // post message
     router.post('/room-messages/:id', (req, res) => {
-        let connection = mysql.createConnection({
-            host: process.env.DB_HOST,
-            user: process.env.DB_USER,
-            password: process.env.DB_PASSWORD,
-            database: process.env.DB_NAME,
-        });
+        let connection = createConnection();
 
         // get message from request
         let message = req.body.message;
@@ -112,12 +98,7 @@ module.exports = ({ io, users, onlineCount }) => {
     });
 
     router.post('/login', (req, res) => {
-        let connection = mysql.createConnection({
-            host: process.env.DB_HOST,
-            user: process.env.DB_USER,
-            password: process.env.DB_PASSWORD,
-            database: process.env.DB_NAME,
-        });
+        let connection = createConnection();
 
         let username = req.body.username;
         let password = req.body.password;
@@ -164,12 +145,7 @@ module.exports = ({ io, users, onlineCount }) => {
     });
 
     router.post('/register', (req, res) => {
-        let connection = mysql.createConnection({
-            host: process.env.DB_HOST,
-            user: process.env.DB_USER,
-            password: process.env.DB_PASSWORD,
-            database: process.env.DB_NAME,
-        });
+        let connection = createConnection();
 
         let username = req.body.username;
         let nickname = req.body.nickname;

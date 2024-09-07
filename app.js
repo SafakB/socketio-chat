@@ -5,6 +5,7 @@ const mysql = require('mysql');
 const cors = require('cors');
 const app = express();
 const httpServer = createServer(app);
+const createConnection = require('./src/db');
 
 
 const io = new Server(httpServer, { cors: { origin: '*' } });
@@ -28,12 +29,7 @@ io.use((socket, next) => {
         return next(new Error("Authentication error: No token provided"));
     }
 
-    let connection = mysql.createConnection({
-        host: process.env.DB_HOST,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME,
-    });
+    let connection = createConnection();
 
     connection.connect(function (err) {
         if (err) throw err;
