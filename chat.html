@@ -72,7 +72,7 @@
             </div>
         </div>
     </div>
-    <input type="hidden" id="room" value="2">
+    <input type="hidden" id="room" value="">
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -164,16 +164,19 @@
             try {
                 const roomsData = await getRooms();
                 const rooms = [];
+                var s = 0;
 
                 roomsData.forEach(room => {
                     $('.list-group').append(`<li class="list-group-item change-room" data-room-id="${room.id}">${room.name}</li>`);
                     $('#rooms-area').append(`<div class="room d-none" data-room="${room.id}"></div>`);
 
-                    if (room.id === 2) {
+                    if (s == 0) {
                         $(`.room[data-room="${room.id}"]`).removeClass('d-none');
+                        $('#room').val(room.id);
                     }
 
                     rooms.push(room.id);
+                    s++;
                 });
 
                 const messagesPromises = rooms.map(room => getRoomMessages(room));
@@ -195,6 +198,15 @@
         function sendMessage() {
             const message = $('.message-input input').val();
             const room = $('#room').val();
+
+            if (!message) {
+                return;
+            }
+
+            if (!room) {
+                alert('Please select a room');
+                return;
+            }
 
             $.ajax({
                 url: `${apiPath}${roomsMessagesEndpoint}${room}`,
