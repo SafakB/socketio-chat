@@ -162,14 +162,13 @@
 
         async function loadRoomsAndMessages() {
             try {
-                const roomsData = await getRooms(); // Odaları bekle
+                const roomsData = await getRooms();
                 const rooms = [];
 
                 roomsData.forEach(room => {
                     $('.list-group').append(`<li class="list-group-item change-room" data-room-id="${room.id}">${room.name}</li>`);
                     $('#rooms-area').append(`<div class="room d-none" data-room="${room.id}"></div>`);
 
-                    // İlk oda aktif
                     if (room.id === 2) {
                         $(`.room[data-room="${room.id}"]`).removeClass('d-none');
                     }
@@ -191,7 +190,6 @@
             }
         }
 
-        // Odaları ve mesajları yüklemeye başla
         loadRoomsAndMessages();
 
         function sendMessage() {
@@ -227,29 +225,25 @@
             $('#room').val(roomId);
         });
 
-        // Belirli bir alanı izlemek için MutationObserver'ı tanımlarız
         const observer = new MutationObserver((mutationsList) => {
             for (const mutation of mutationsList) {
                 if (mutation.type === 'childList') {
-                    // Yeni bir .room elemanı eklenmişse veya içeriği değişmişse kaydır
                     scrollToBottom();
                 }
             }
         });
 
-        // İzleme işlemini başlatırız
         const roomsArea = document.getElementById('rooms-area');
         observer.observe(roomsArea, { childList: true, subtree: true });
 
         function scrollToBottom() {
-            const rooms = document.querySelectorAll('.room'); // Tüm .room sınıflı elemanları seçer
+            const rooms = document.querySelectorAll('.room');
 
             rooms.forEach(room => {
-                room.scrollTop = room.scrollHeight; // Her bir room elemanını en alta kaydırır
+                room.scrollTop = room.scrollHeight;
             });
         }
 
-        // İlk yükleme sırasında mevcut odaları kontrol eder
         document.addEventListener('DOMContentLoaded', scrollToBottom);
 
     </script>

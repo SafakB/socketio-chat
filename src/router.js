@@ -3,7 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const mysql = require('mysql');
-const createConnection = require('./db'); // db.js dosyasını içe aktardık
+const createConnection = require('./db');
 
 
 module.exports = ({ io, users, onlineCount }) => {
@@ -21,14 +21,12 @@ module.exports = ({ io, users, onlineCount }) => {
         });
     });
 
-    // get room messages localhost:3001/room-messages/1
     router.get('/room-messages/:id', (req, res) => {
         let connection = createConnection();
 
         connection.connect(function (err) {
             if (err) throw err;
 
-            // `room-messages` tablosunu `users` tablosuyla birleştiriyoruz
             const query = `
             SELECT 
                 rm.*, 
@@ -43,7 +41,6 @@ module.exports = ({ io, users, onlineCount }) => {
                 rm.room_id = ?
         `;
 
-            // SQL sorgusu parametre ile güvenli hale getirildi
             connection.query(query, [req.params.id], function (err, result) {
                 if (err) throw err;
 
@@ -53,11 +50,9 @@ module.exports = ({ io, users, onlineCount }) => {
         });
     });
 
-    // post message
     router.post('/room-messages/:id', (req, res) => {
         let connection = createConnection();
 
-        // get message from request
         let message = req.body.message;
         let userId = req.body.userId;
 
@@ -70,25 +65,21 @@ module.exports = ({ io, users, onlineCount }) => {
             return;
         }
 
-        // İlk olarak mesajı ekleyin
         connection.query('INSERT INTO `room-messages` (room_id, message, user_id) VALUES (?, ?, ?)', [req.params.id, message, userId], function (err, result) {
             if (err) throw err;
-
-            // Mesaj ekleme işlemi tamamlandıktan sonra kullanıcı adını almak için birleştirme yapın
+            n
             connection.query('SELECT `room-messages`.*, users.username FROM `room-messages` INNER JOIN users ON `room-messages`.user_id = users.id WHERE `room-messages`.id = ?', [result.insertId], function (err, rows) {
                 if (err) throw err;
 
-                // Sonuçları JSON formatında gönderin ve veritabanı bağlantısını sonlandırın
                 res.json(rows);
                 connection.end();
 
-                // Socket verisini yayınlayın
                 if (rows.length > 0) {
                     const messageData = {
                         message: rows[0].message,
                         room_id: rows[0].room_id,
                         user_id: rows[0].user_id,
-                        username: rows[0].username // kullanıcı adı eklendi
+                        username: rows[0].username
                     };
 
                     io.emit('room message', messageData);

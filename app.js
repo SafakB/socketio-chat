@@ -23,7 +23,7 @@ const dependencies = {
 const userRoutes = require('./src/router')(dependencies);
 
 io.use((socket, next) => {
-    const token = socket.handshake.auth.token; // Client'tan gönderilen token
+    const token = socket.handshake.auth.token;
 
     if (!token) {
         return next(new Error("Authentication error: No token provided"));
