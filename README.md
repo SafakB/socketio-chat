@@ -30,26 +30,26 @@ Mysql Supported
 | 🟢 Room Messages | /room-messages/:id  | `header: { "Authorization": "Bearer " }` |
 | 🟠 Send Message to Room | /room-messages/:id  | `{ "message": "" }` `header: { "Authorization": "Bearer " }` |
 
-#### 📋 Before
+### 📋 Before
 - Create database
 - Import database `exampledb.sql`
 - Set `.env.example` and rename `.env`
 
-#### 🏁 Start NodeJS Server
+### 🏁 Start NodeJS Server
 
 ```bash
 npm install
 node app.js
 ```
 
-#### 🔗 Go URL
+### 🔗 Go URL
 `http://localhost:3001/index.html`
 
-#### 🧪 Test User
+### 🧪 Test User
 User : `test`
 Password : `123456`
 
-### 🎯 Roadmap
+## 🎯 Roadmap
 
 - Enabled Https server with certificate
 - ~~Token change JWT~~
