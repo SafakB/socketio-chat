@@ -57,7 +57,8 @@ Password : `123456`
 
 - Enabled Https server with certificate
 - ~~Token change JWT~~
-- Fix multiple tab login
+- ~~Fix multiple tab login~~
+- Add new room messages counts
 
 
 #### Credits
