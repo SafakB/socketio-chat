@@ -26,9 +26,9 @@ Mysql Supported
 | 🟠 POST | Register | /register | `{"username" : "","nickname" :"","password" : "" }` | 
 | 🟠 POST | Logout | /logout | `{ "token": "" }` | 
 | 🟠 POST | Check Token | /check-token  | `{ "token": "" }` |
-| 🟢 GET | Get Rooms | /rooms  |  |
-| 🟢 GET | Room Messages | /room-messages/:id  |  |
-| 🟠 POST | Send Message to Room | /room-messages/:id  | `{ "message": "" }` |
+| 🟢 GET | Get Rooms | /rooms  | `header: { "Authorization": "Bearer " }` |
+| 🟢 GET | Room Messages | /room-messages/:id  | `header: { "Authorization": "Bearer " }` |
+| 🟠 POST | Send Message to Room | /room-messages/:id  | `{ "message": "" }` `header: { "Authorization": "Bearer " }` |
 
 #### 📋 Before
 - Create database
