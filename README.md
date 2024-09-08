@@ -21,7 +21,7 @@ Mysql Supported
 
 ## 📍 API Endpoints
 | Method  | Action  | Url | Request  |
-| ------ | ------ | ------ |
+| ------ | ------ | ------ | ------ |
 | 🟠 POST | Login | /login | `{ "username" : "test","password" : "123456" }` | 
 | 🟠 POST | Register | /register | `{ "username" : "test","nickname" :"Test","password" : "123456" }` | 
 | 🟠 POST | Logout | /logout | `{ "token": "XXXXXXXXXX" }` | 
