@@ -90,6 +90,6 @@ app.use('/', messageRoutes);
 
 
 
-httpServer.listen(3001, () => {
-    console.log('listening on *:3001');
+httpServer.listen(process.env.PORT || 3001, () => {
+    console.log('listening on *:' + (process.env.PORT || 3001));
 });
