@@ -22,17 +22,19 @@ authRoutes.post('/login', (req, res) => {
         return;
     }
 
+    const query = "SELECT * FROM users WHERE username = ? AND password = ?";
     connection.connect(function (err) {
         if (err) throw err;
         const crypto = require('crypto')
         const passwordMd5 = crypto.createHash('md5').update(password).digest('hex');
 
-        connection.query('SELECT * FROM users WHERE username = "' + username + '" AND password = "' + passwordMd5 + '"', function (err, result) {
+        connection.query(query, [username, passwordMd5], function (err, result) {
             if (err) throw err;
             if (result.length > 0) {
                 let token = crypto.randomBytes(64).toString('hex');
                 console.log(token);
-                connection.query('UPDATE users SET token = "' + token + '" WHERE id = ' + result[0].id, function (err, result) {
+                const updateQuery = 'UPDATE users SET token = ? WHERE id = ?';
+                connection.query(updateQuery, [token, result[0].id], function (err, result) {
                     if (err) throw err;
                 });
 
@@ -80,12 +82,14 @@ authRoutes.post('/register', (req, res) => {
         const crypto = require('crypto')
         const passwordMd5 = crypto.createHash('md5').update(password).digest('hex');
 
-        connection.query('SELECT * FROM users WHERE username = "' + username + '"', function (err, result) {
+        const query = "SELECT * FROM users WHERE username = ?";
+        connection.query(query, [username], function (err, result) {
             if (err) throw err;
             if (result.length > 0) {
                 res.json({ error: 'username already exists', success: false });
             } else {
-                connection.query('INSERT INTO users (username, nickname, password) VALUES ("' + username + '", "' + nickname + '", "' + passwordMd5 + '")', function (err, result) {
+                const query = 'INSERT INTO users (username, nickname, password) VALUES (?, ?, ?)';
+                connection.query(query, [username, nickname, passwordMd5], function (err, result) {
                     if (err) throw err;
                     res.json({ success: true });
                 });
