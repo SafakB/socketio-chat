@@ -6,7 +6,10 @@ Using NodeJS with socket.io
 Creating server and client with socket connection
 Mysql Supported
 
-## Features
+## 🚨 Important
+`token` and `password` hashes not safety
+
+## 🔥 Features
 
 - Register
 - Login
@@ -17,21 +20,30 @@ Mysql Supported
 - Send Message
 
 
-#### Before
+#### 📋 Before
 - Create database
 - Import database `exampledb.sql`
 - Set `.env.example` and rename `.env`
 
-#### Start NodeJS Server
+#### 🏁 Start NodeJS Server
 
 ```bash
 npm install
 node app.js
 ```
 
-#### Go URL
+#### 🔗 Go URL
 `http://localhost:3001/index.html`
 
+#### 🧪 Test User
+User : `test`
+Password : `123456`
+
+### 🎯 Roadmap
+
+- Enabled Https server with certificate
+- Token change JWT
+- Fix multiple tab login
 
 
 
