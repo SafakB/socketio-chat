@@ -2,7 +2,9 @@
 [![NPM version](https://badge.fury.io/js/socketio-chat.svg)](https://www.npmjs.com/package/socket.io)
 ![Downloads](https://img.shields.io/npm/dm/socketio-chat.svg?style=flat)
 
-![image](https://github.com/user-attachments/assets/c80064ac-f59b-42d2-b78d-98aa52e17e4d)
+![image](https://github.com/user-attachments/assets/007bd8b6-ef48-4a8b-a86f-daa21e7214ce)
+
+![image](https://github.com/user-attachments/assets/36e9dfef-717a-4b77-92f5-79703995a781)
 
 Using NodeJS with socket.io
 Creating server and client with socket connection
