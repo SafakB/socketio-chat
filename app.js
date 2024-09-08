@@ -6,7 +6,8 @@ const cors = require('cors');
 const app = express();
 const httpServer = createServer(app);
 const createConnection = require('./utils/db');
-
+const jwt = require('jsonwebtoken');
+const secretKey = process.env.SECRET_KEY;
 
 const io = new Server(httpServer, { cors: { origin: '*' } });
 
@@ -29,6 +30,12 @@ io.use((socket, next) => {
     if (!token) {
         return next(new Error("Authentication error: No token provided"));
     }
+
+    jwt.verify(token, secretKey, (err, decoded) => {
+        if (err) {
+            return next(new Error("Authentication error: Invalid token"));
+        }
+    });
 
     let connection = createConnection();
 

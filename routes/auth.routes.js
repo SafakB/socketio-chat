@@ -4,6 +4,10 @@ const express = require('express');
 const authRoutes = express.Router();
 const mysql = require('mysql');
 const createConnection = require('../utils/db');
+const jwt = require('jsonwebtoken');
+
+
+const secretKey = process.env.SECRET_KEY;
 
 authRoutes.post('/login', (req, res) => {
     console.log('login event');
@@ -31,7 +35,8 @@ authRoutes.post('/login', (req, res) => {
         connection.query(query, [username, passwordMd5], function (err, result) {
             if (err) throw err;
             if (result.length > 0) {
-                let token = crypto.randomBytes(64).toString('hex');
+                //let token = crypto.randomBytes(64).toString('hex');
+                const token = jwt.sign({ id: result[0].id, username: result[0].username }, secretKey, { expiresIn: '1h' });
                 console.log(token);
                 const updateQuery = 'UPDATE users SET token = ? WHERE id = ?';
                 connection.query(updateQuery, [token, result[0].id], function (err, result) {
