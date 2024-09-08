@@ -7,7 +7,7 @@ Creating server and client with socket connection
 Mysql Supported
 
 ## 🚨 Important
-`token` and `password` hashes not safety
+~~`token`~~ and `password`(md5) hashes not safety
 
 ## 🔥 Features
 
@@ -19,6 +19,13 @@ Mysql Supported
 - Connect / Disconnect
 - Send Message
 
+## 📍 API Endpoints
+|   |   |   |
+| ------ | ------ | ------ |
+| Login | /login |  | 
+| Register | /register |  | 
+| Logout | /logout |  | 
+| Check Token | /check-token  | 
 
 #### 📋 Before
 - Create database
@@ -42,7 +49,7 @@ Password : `123456`
 ### 🎯 Roadmap
 
 - Enabled Https server with certificate
-- Token change JWT
+- ~~Token change JWT~~
 - Fix multiple tab login
 
 
