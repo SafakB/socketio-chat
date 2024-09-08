@@ -20,7 +20,7 @@ Mysql Supported
 - Send Message
 
 ## 📍 API Endpoints
-| Action  | Url | Request  |
+| Action  | Url | Request + Header  |
 | ------ | ------ | ------ |
 | 🟠 Login | /login | `{ "username" : "","password" : "" }` | 
 | 🟠 Register | /register | `{"username" : "","nickname" :"","password" : "" }` | 
