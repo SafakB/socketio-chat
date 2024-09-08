@@ -4,9 +4,13 @@ const express = require('express');
 const messageRoutes = express.Router();
 const mysql = require('mysql');
 const createConnection = require('../utils/db');
+const authenticateToken = require('../utils/jwtMiddleware');
 
 
 module.exports = ({ io, users, onlineCount }) => {
+
+    messageRoutes.use(authenticateToken);
+
     messageRoutes.get('/rooms', (req, res) => {
         let connection = createConnection();
 
@@ -54,7 +58,7 @@ module.exports = ({ io, users, onlineCount }) => {
         let connection = createConnection();
 
         let message = req.body.message;
-        let userId = req.body.userId;
+        let userId = req.user.id;
 
         if (!message) {
             res.json({ error: 'message is required' });

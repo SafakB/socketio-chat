@@ -118,30 +118,6 @@
 
         }
 
-        const storedUser = JSON.parse(localStorage.getItem("user"));
-        const token = localStorage.getItem("token");
-
-        console.log(storedUser);
-        console.log(token);
-
-        function logout() {
-            localStorage.removeItem("user");
-            localStorage.removeItem("token");
-        }
-
-        function checkLogin() {
-            if (storedUser && token) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        if (checkLogin()) {
-            window.location.href = 'chat.html';
-        } else {
-            console.log('User is not logged in');
-        }
     </script>
 </body>
 

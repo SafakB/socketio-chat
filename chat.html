@@ -103,18 +103,43 @@
         }
 
         function checkLogin() {
-            if (storedUser && token) {
-                return true;
-            } else {
-                return false;
-            }
+            return new Promise((resolve, reject) => {
+                var token = localStorage.getItem("token");
+
+                if (!token) {
+                    resolve(false);
+                    return;
+                }
+
+                $.ajax({
+                    url: 'http://localhost:3001/check-token',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ token: token }),
+                    success: function (data) {
+                        if (data.success) {
+                            resolve(true);
+                        } else {
+                            resolve(false);
+                        }
+                    },
+                    error: function (err) {
+                        resolve(false);
+                    }
+                });
+            });
         }
 
-        if (checkLogin()) {
-            console.log('User is logged in');
-        } else {
-            window.location.href = 'index.html';
-        }
+        checkLogin().then(isLoggedIn => {
+            if (isLoggedIn) {
+                console.log('User is logged in');
+            } else {
+                console.log('User is not logged in');
+                localStorage.removeItem("user");
+                localStorage.removeItem("token");
+                window.location.href = 'index.html';
+            }
+        });
 
         const apiPath = 'http://localhost:3001/';
         const roomsEndpoint = 'rooms';
@@ -160,17 +185,39 @@
 
         function getRooms() {
             return new Promise((resolve, reject) => {
-                $.get(`${apiPath}${roomsEndpoint}`, function (data) {
-                    resolve(data);
-                }).fail(error => reject(error));
+                const token = localStorage.getItem("token");
+                $.ajax({
+                    url: `${apiPath}${roomsEndpoint}`,
+                    type: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    success: function (data) {
+                        resolve(data);
+                    },
+                    error: function (error) {
+                        reject(error);
+                    }
+                });
             });
         }
 
         function getRoomMessages(roomId) {
             return new Promise((resolve, reject) => {
-                $.get(`${apiPath}${roomsMessagesEndpoint}${roomId}`, function (data) {
-                    resolve({ roomId, messages: data });
-                }).fail(error => reject(error));
+                const token = localStorage.getItem("token");
+                $.ajax({
+                    url: `${apiPath}${roomsMessagesEndpoint}${roomId}`,
+                    type: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    success: function (data) {
+                        resolve({ roomId, messages: data });
+                    },
+                    error: function (error) {
+                        reject(error);
+                    }
+                });
             });
         }
 
@@ -221,12 +268,15 @@
                 alert('Please select a room');
                 return;
             }
-
+            const token = localStorage.getItem("token");
             $.ajax({
                 url: `${apiPath}${roomsMessagesEndpoint}${room}`,
                 type: 'POST',
                 contentType: 'application/json', // JSON formatında gönderim
-                data: JSON.stringify({ message: message, userId: userId }), // JSON.stringify kullanımı
+                data: JSON.stringify({ message: message }), // JSON.stringify kullanımı
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
                 success: function (data) {
                     console.log(data);
                     $('.message-input input').val('');

@@ -5,6 +5,7 @@ const authRoutes = express.Router();
 const mysql = require('mysql');
 const createConnection = require('../utils/db');
 const jwt = require('jsonwebtoken');
+const authenticateToken = require('../utils/jwtMiddleware');
 
 
 const secretKey = process.env.SECRET_KEY;
@@ -124,6 +125,38 @@ authRoutes.post('/logout', (req, res) => {
             connection.end();
         });
     });
+
+});
+
+authRoutes.post('/check-token', (req, res) => {
+    let connection = createConnection();
+    let token = req.body.token;
+
+    if (!token) {
+        res.json({ error: 'token is required', success: false });
+        return;
+    }
+
+    jwt.verify(token, secretKey, (err, decoded) => {
+        if (err) {
+            return res.status(401).json({ success: false, error: 'Invalid token' });
+        }
+
+        connection.connect(function (err) {
+            if (err) throw err;
+            const query = 'SELECT * FROM users WHERE token = ?';
+            connection.query(query, [token], function (err, result) {
+                if (err) throw err;
+                if (result.length > 0) {
+                    res.json({ success: true, error: null });
+                } else {
+                    res.json({ success: false, error: 'invalid token' });
+                }
+                connection.end();
+            });
+        });
+    });
+
 
 });
 
