@@ -22,12 +22,13 @@ Mysql Supported
 ## 📍 API Endpoints
 | Method  | Action  | Url | Request  |
 | ------ | ------ | ------ | ------ |
-| 🟠 POST | Login | /login | `{ "username" : "test","password" : "123456" }` | 
-| 🟠 POST | Register | /register | `{ "username" : "test","nickname" :"Test","password" : "123456" }` | 
-| 🟠 POST | Logout | /logout | `{ "token": "XXXXXXXXXX" }` | 
+| 🟠 POST | Login | /login | `{ "username" : "","password" : "" }` | 
+| 🟠 POST | Register | /register | `{"username" : "","nickname" :"","password" : "" }` | 
+| 🟠 POST | Logout | /logout | `{ "token": "" }` | 
+| 🟠 POST | Check Token | /check-token  | `{ "token": "" }` |
 | 🟢 GET | Get Rooms | /rooms  |  |
 | 🟢 GET | Room Messages | /room-messages/:id  |  |
-| 🟠 POST | Send Message to Room | /room-messages/:id  | `{ "message": "your message" }` |
+| 🟠 POST | Send Message to Room | /room-messages/:id  | `{ "message": "" }` |
 
 #### 📋 Before
 - Create database
