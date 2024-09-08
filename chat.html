@@ -5,73 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        .circle {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 10px;
-        }
-
-        .green {
-            background-color: green;
-        }
-
-        .red {
-            background-color: red;
-        }
-
-        .room {
-            height: 300px;
-            overflow-y: auto;
-        }
-
-        .change-room {
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link href="assets/css/app.css" rel="stylesheet">
 </head>
 
 
 <body class="d-nonex">
+    <div class="container">
+        <div class="row">
 
-    <div class="wrapper">
-        <div class="container">
-            <div class="row">
-                <div class="col-2">
 
-                    <p>User ID: <span class="user-id"></span> <span class="circle red"></span></p>
-                    <p>Online Users: <span class="online-count">0</span></p>
-                    <p><input type="button" value="Logout" onclick="logout()"></p>
-                    <h2>Rooms</h2>
-                    <ul class="list-group">
-
-                    </ul>
-
-                </div>
-                <div class="col-8">
-                    <h2>Messages</h2>
-                    <div id="rooms-area">
-                        <!-- <div class="room" data-room="2">
-
-                        </div>
-                        <div class="room d-none" data-room="3">
-
-                        </div> -->
-                    </div>
-                    <div class="message-input">
-                        <input type="text" class="form-control" placeholder="Enter message">
-                        <button class="btn btn-primary" onclick="sendMessage()">Send</button>
+            <section class="discussions">
+                <div class="discussion search">
+                    <div class="searchbar">
+                        <i class="icon fa fa-user-o circle green" aria-hidden="true"></i>
+                        <p class="name">Megan Leib</p>
+                        <a class="icon fa fa-lock clickable logout" onclick="logout()" aria-hidden="true"></a>
                     </div>
                 </div>
-                <div class="col-2">
-                    <h2>Online Users</h2>
-                    <p class="online-users"></p>
+            </section>
+            <section class="chat">
+                <div class="header-chat">
+                    <i class="icon fa fa-user-o" aria-hidden="true"></i>
+                    <div class="name">
+                        <span>Online Users (<span class="online-count">0</span>)</span>
+                        <p class="online-users"></p>
+                    </div>
+                    <i class="icon clickable fa fa-ellipsis-h right" aria-hidden="true"></i>
                 </div>
-            </div>
+                <div id="rooms-area">
+                </div>
+                <div class="footer-chat">
+                    <i class="icon fa fa-smile-o clickable" style="font-size:25pt;" aria-hidden="true"></i>
+                    <input type="text" class="write-message" placeholder="Type your message here"></input>
+                    <i class="icon send fa fa-paper-plane-o clickable" aria-hidden="true" onclick="sendMessage()"></i>
+                </div>
+            </section>
         </div>
     </div>
+
     <input type="hidden" id="room" value="">
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -79,250 +52,10 @@
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"
         integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI"
         crossorigin="anonymous"></script>
-    <script>
-        const storedUser = JSON.parse(localStorage.getItem("user"));
-        const token = localStorage.getItem("token");
-        function logout() {
-            localStorage.removeItem("user");
-            localStorage.removeItem("token");
-
-            $.ajax({
-                url: 'http://localhost:3001/logout',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({ token: token }),
-                success: function (data) {
-                    console.log(data);
-                },
-                error: function (err) {
-                    console.error(err);
-                }
-            });
-
-            window.location.href = 'index.html';
-        }
-
-        function checkLogin() {
-            return new Promise((resolve, reject) => {
-                var token = localStorage.getItem("token");
-
-                if (!token) {
-                    resolve(false);
-                    return;
-                }
-
-                $.ajax({
-                    url: 'http://localhost:3001/check-token',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({ token: token }),
-                    success: function (data) {
-                        if (data.success) {
-                            resolve(true);
-                        } else {
-                            resolve(false);
-                        }
-                    },
-                    error: function (err) {
-                        resolve(false);
-                    }
-                });
-            });
-        }
-
-        checkLogin().then(isLoggedIn => {
-            if (isLoggedIn) {
-                console.log('User is logged in');
-            } else {
-                console.log('User is not logged in');
-                localStorage.removeItem("user");
-                localStorage.removeItem("token");
-                window.location.href = 'index.html';
-            }
-        });
-
-        const apiPath = 'http://localhost:3001/';
-        const roomsEndpoint = 'rooms';
-        const roomsMessagesEndpoint = 'room-messages/';
-
-        var userId = storedUser.id;
-        $('.user-id').text(userId);
-
-        const socket = io("http://localhost:3001", {
-            auth: {
-                token: token
-            },
-        });
-
-        socket.on('connect', function () {
-            $('.circle').removeClass('red').addClass('green');
-        });
-
-        socket.on('disconnect', function () {
-            $('.circle').removeClass('green').addClass('red');
-            $('.online-users').html('?');
-            $('.online-count').html('?');
-
-        });
-
-        socket.on('onlineCount', (data) => {
-            $('.online-count').html(data);
-        });
-
-        socket.on('users', (data) => {
-            if (data.length > 0) {
-                const users = data.map(user => user.username);
-                $('.online-users').html(users.join(', '));
-            } else {
-                $('.online-users').html('No online users');
-            }
-        });
-
-        socket.on('room message', (data) => {
-            console.log("Room message", data);
-            $(`.room[data-room="${data.room_id}"]`).append(`<div class="message"><p>(${data.username}) : ${data.message}</p></div>`);
-        });
-
-        function getRooms() {
-            return new Promise((resolve, reject) => {
-                const token = localStorage.getItem("token");
-                $.ajax({
-                    url: `${apiPath}${roomsEndpoint}`,
-                    type: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    },
-                    success: function (data) {
-                        resolve(data);
-                    },
-                    error: function (error) {
-                        reject(error);
-                    }
-                });
-            });
-        }
-
-        function getRoomMessages(roomId) {
-            return new Promise((resolve, reject) => {
-                const token = localStorage.getItem("token");
-                $.ajax({
-                    url: `${apiPath}${roomsMessagesEndpoint}${roomId}`,
-                    type: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    },
-                    success: function (data) {
-                        resolve({ roomId, messages: data });
-                    },
-                    error: function (error) {
-                        reject(error);
-                    }
-                });
-            });
-        }
-
-        async function loadRoomsAndMessages() {
-            try {
-                const roomsData = await getRooms();
-                const rooms = [];
-                var s = 0;
-
-                roomsData.forEach(room => {
-                    $('.list-group').append(`<li class="list-group-item change-room" data-room-id="${room.id}">${room.name}</li>`);
-                    $('#rooms-area').append(`<div class="room d-none" data-room="${room.id}"></div>`);
-
-                    if (s == 0) {
-                        $(`.room[data-room="${room.id}"]`).removeClass('d-none');
-                        $('#room').val(room.id);
-                    }
-
-                    rooms.push(room.id);
-                    s++;
-                });
-
-                const messagesPromises = rooms.map(room => getRoomMessages(room));
-                const messagesData = await Promise.all(messagesPromises);
-
-                messagesData.forEach(({ roomId, messages }) => {
-                    messages.forEach(message => {
-                        $(`.room[data-room="${roomId}"]`).append(`<div class="message"><p>(${message.username}) : ${message.message}</p></div>`);
-                    });
-                });
-
-            } catch (error) {
-                console.error("Hata oluştu:", error);
-            }
-        }
-
-        loadRoomsAndMessages();
-
-        function sendMessage() {
-            const message = $('.message-input input').val();
-            const room = $('#room').val();
-
-            if (!message) {
-                return;
-            }
-
-            if (!room) {
-                alert('Please select a room');
-                return;
-            }
-            const token = localStorage.getItem("token");
-            $.ajax({
-                url: `${apiPath}${roomsMessagesEndpoint}${room}`,
-                type: 'POST',
-                contentType: 'application/json', // JSON formatında gönderim
-                data: JSON.stringify({ message: message }), // JSON.stringify kullanımı
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                },
-                success: function (data) {
-                    console.log(data);
-                    $('.message-input input').val('');
-                    $('.message-input input').focus();
-                },
-                error: function (err) {
-                    console.error(err);
-                }
-            });
-        }
-
-        $('.message-input input').on('keypress', function (e) {
-            if (e.which === 13) {
-                sendMessage();
-            }
-        });
-
-        $(document).on('click', '.change-room', function () {
-            const roomId = $(this).data('room-id');
-            $('.room').addClass('d-none');
-            $(`.room[data-room="${roomId}"]`).removeClass('d-none');
-            $('#room').val(roomId);
-        });
-
-        const observer = new MutationObserver((mutationsList) => {
-            for (const mutation of mutationsList) {
-                if (mutation.type === 'childList') {
-                    scrollToBottom();
-                }
-            }
-        });
-
-        const roomsArea = document.getElementById('rooms-area');
-        observer.observe(roomsArea, { childList: true, subtree: true });
-
-        function scrollToBottom() {
-            const rooms = document.querySelectorAll('.room');
-
-            rooms.forEach(room => {
-                room.scrollTop = room.scrollHeight;
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', scrollToBottom);
-
-    </script>
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/socket.js"></script>
 </body>
 
 </html>
