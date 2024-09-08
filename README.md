@@ -20,15 +20,15 @@ Mysql Supported
 - Send Message
 
 ## 📍 API Endpoints
-| Method  | Action  | Url | Request  |
-| ------ | ------ | ------ | ------ |
-| 🟠 POST | Login | /login | `{ "username" : "","password" : "" }` | 
-| 🟠 POST | Register | /register | `{"username" : "","nickname" :"","password" : "" }` | 
-| 🟠 POST | Logout | /logout | `{ "token": "" }` | 
-| 🟠 POST | Check Token | /check-token  | `{ "token": "" }` |
-| 🟢 GET | Get Rooms | /rooms  | `header: { "Authorization": "Bearer " }` |
-| 🟢 GET | Room Messages | /room-messages/:id  | `header: { "Authorization": "Bearer " }` |
-| 🟠 POST | Send Message to Room | /room-messages/:id  | `{ "message": "" }` `header: { "Authorization": "Bearer " }` |
+| Action  | Url | Request  |
+| ------ | ------ | ------ |
+| 🟠 Login | /login | `{ "username" : "","password" : "" }` | 
+| 🟠 Register | /register | `{"username" : "","nickname" :"","password" : "" }` | 
+| 🟠 Logout | /logout | `{ "token": "" }` | 
+| 🟠 Check Token | /check-token  | `{ "token": "" }` |
+| 🟢 Get Rooms | /rooms  | `header: { "Authorization": "Bearer " }` |
+| 🟢 Room Messages | /room-messages/:id  | `header: { "Authorization": "Bearer " }` |
+| 🟠 Send Message to Room | /room-messages/:id  | `{ "message": "" }` `header: { "Authorization": "Bearer " }` |
 
 #### 📋 Before
 - Create database
