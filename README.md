@@ -1,6 +1,6 @@
 # NodeJS socket.io Chat (Mysql Supported)
-[![NPM version](https://badge.fury.io/js/nodejs_socket.svg)](https://www.npmjs.com/package/socket.io)
-![Downloads](https://img.shields.io/npm/dm/nodejs_socket.svg?style=flat)
+[![NPM version](https://badge.fury.io/js/socketio-chat.svg)](https://www.npmjs.com/package/socket.io)
+![Downloads](https://img.shields.io/npm/dm/socketio-chat.svg?style=flat)
 
 Using NodeJS with socket.io
 Creating server and client with socket connection
