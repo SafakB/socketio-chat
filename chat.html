@@ -85,6 +85,20 @@
         function logout() {
             localStorage.removeItem("user");
             localStorage.removeItem("token");
+
+            $.ajax({
+                url: 'http://localhost:3001/logout',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ token: token }),
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function (err) {
+                    console.error(err);
+                }
+            });
+
             window.location.href = 'index.html';
         }
 

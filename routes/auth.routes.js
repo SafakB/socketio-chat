@@ -101,4 +101,25 @@ authRoutes.post('/register', (req, res) => {
 
 });
 
+authRoutes.post('/logout', (req, res) => {
+    let connection = createConnection();
+    let token = req.body.token;
+
+    if (!token) {
+        res.json({ error: 'token is required' });
+        return;
+    }
+
+    connection.connect(function (err) {
+        if (err) throw err;
+        const query = 'UPDATE users SET token = NULL WHERE token = ?';
+        connection.query(query, [token], function (err, result) {
+            if (err) throw err;
+            res.json({ success: true });
+            connection.end();
+        });
+    });
+
+});
+
 module.exports = authRoutes;
