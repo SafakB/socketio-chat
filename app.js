@@ -5,7 +5,7 @@ const mysql = require('mysql');
 const cors = require('cors');
 const app = express();
 const httpServer = createServer(app);
-const createConnection = require('./src/db');
+const createConnection = require('./utils/db');
 
 
 const io = new Server(httpServer, { cors: { origin: '*' } });
@@ -20,7 +20,8 @@ const dependencies = {
 };
 
 
-const userRoutes = require('./src/router')(dependencies);
+const authRoutes = require('./routes/auth.routes');
+const messageRoutes = require('./routes/message.routes')(dependencies);
 
 io.use((socket, next) => {
     const token = socket.handshake.auth.token;
@@ -76,7 +77,8 @@ io.on('connection', (socket) => {
 
 app.use(cors());
 app.use(express.json());
-app.use('/', userRoutes);
+app.use('/', authRoutes);
+app.use('/', messageRoutes);
 
 
 
