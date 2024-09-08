@@ -25,7 +25,9 @@ Mysql Supported
 | 🟠 POST | Login | /login | `{ "username" : "test","password" : "123456" }` | 
 | 🟠 POST | Register | /register | `{ "username" : "test","nickname" :"Test","password" : "123456" }` | 
 | 🟠 POST | Logout | /logout | `{ "token": "XXXXXXXXXX" }` | 
-| 🟠 POST | Check Token | /check-token  | `{ "token": "XXXXXXXXXX" }` |
+| 🟢 GET | Get Rooms | /rooms  |  |
+| 🟢 GET | Room Messages | /room-messages/:id  |  |
+| 🟠 POST | Send Message to Room | /room-messages/:id  | `{ "message": "your message" }` |
 
 #### 📋 Before
 - Create database
