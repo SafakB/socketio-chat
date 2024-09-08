@@ -51,7 +51,11 @@ io.use((socket, next) => {
                     nickname: result[0].nickname,
                     username: result[0].username
                 };
-                users.push(user);
+                let userExists = users.some(user => user.id === socket.userId);
+                if (!userExists) {
+                    onlineCount++;
+                    users.push(user);
+                }
                 next();
             } else {
                 next(new Error("Authentication error: Invalid token"));
@@ -63,7 +67,6 @@ io.use((socket, next) => {
 
 io.on('connection', (socket) => {
 
-    onlineCount++;
     io.emit('onlineCount', onlineCount);
     io.emit('users', users);
 
