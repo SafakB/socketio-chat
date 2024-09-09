@@ -59,6 +59,7 @@ Password : `123456`
 - ~~Token change JWT~~
 - ~~Fix multiple tab login~~
 - Add new room messages counts
+- Room message convert socket io `to` method
 
 
 #### Credits
